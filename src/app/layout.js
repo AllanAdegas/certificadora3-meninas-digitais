@@ -16,6 +16,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { UserProvider, useUser } from "@/context/UserContext"; // Importação corrigida
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import "./globals.css";
 
 const Header = () => {
@@ -109,26 +110,28 @@ export default function RootLayout({ children }) {
         }}
       >
         {/* UserProvider para fornecer o contexto global do usuário */}
-        <UserProvider>
-          <Header />
-          {/* Main Content */}
-          <Box sx={{ pt: 8, px: 2, minHeight: "100vh" }}>{children}</Box>
-          {/* Footer */}
-          <Box
-            component="footer"
-            sx={{
-              textAlign: "center",
-              py: 2,
-              backgroundColor: "#C18B95",
-              color: "#0D0D0D",
-              margin: 0,
-            }}
-          >
-            <Typography variant="body2">
-              © 2024 Meninas Digitais. Todos os direitos reservados.
-            </Typography>
-          </Box>
-        </UserProvider>
+        <AppRouterCacheProvider>
+          <UserProvider>
+            <Header />
+            {/* Main Content */}
+            <Box sx={{ pt: 8, px: 2, minHeight: "100vh" }}>{children}</Box>
+            {/* Footer */}
+            <Box
+              component="footer"
+              sx={{
+                textAlign: "center",
+                py: 2,
+                backgroundColor: "#C18B95",
+                color: "#0D0D0D",
+                margin: 0,
+              }}
+            >
+              <Typography variant="body2">
+                © 2024 Meninas Digitais. Todos os direitos reservados.
+              </Typography>
+            </Box>
+          </UserProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );

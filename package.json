@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@date-io/date-fns": "^2.14.0",
+    "@emotion/cache": "^11.13.5",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.1.7",
     "@mui/material": "^6.1.7",
+    "@mui/material-nextjs": "^6.1.8",
     "@mui/x-date-pickers": "^5.0.0",
     "date-fns": "^2.29.2",
     "firebase": "^11.0.1",

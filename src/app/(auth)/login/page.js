@@ -1,9 +1,12 @@
 "use client";
+// @ts-check
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { login } from "@/services/auth";
 import { Button, TextField, Typography, Box } from "@mui/material";
+
+import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -33,6 +36,9 @@ export default function LoginPage() {
         maxWidth: 400,
       }}
     >
+      <Typography variant="h4" align="center" component="h1">
+        Bem-vinda :)
+      </Typography>
       <TextField
         label="E-mail"
         type="email"
@@ -62,14 +68,13 @@ export default function LoginPage() {
       >
         Entrar
       </Button>
-      <Typography variant="body2" sx={{ textAlign: "center" }}>
+      <Typography component="div" variant="body2" sx={{ textAlign: "center" }}>
         Não tem uma conta?{" "}
-        <a
-          href="/register"
-          style={{ color: "#772B8C", textDecoration: "none" }}
-        >
-          Cadastre-se
-        </a>
+        <Link href="/register">
+          <span style={{ color: "#772B8C", textDecoration: "none" }}>
+            Cadastre-se
+          </span>
+        </Link>
       </Typography>
     </Box>
   );
