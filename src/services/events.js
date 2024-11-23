@@ -96,3 +96,18 @@ export const updateEventById = async (id, updatedData) => {
     throw error;
   }
 };
+
+// Atualiza os eventos no calendário
+export async function getEvents() {
+  try {
+    const eventsRef = collection(db, "eventos");
+    const snapshot = await getDocs(eventsRef);
+    return snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+  } catch (error) {
+    console.error("Erro ao buscar eventos:", error);
+    throw error;
+  }
+}
