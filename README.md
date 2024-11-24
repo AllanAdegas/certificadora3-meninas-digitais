@@ -15,7 +15,13 @@
 
 ## Descrição do Projeto
 
-O Gerenciador de Eventos **Meninas Digitais UTFPR-CP** visa facilitar o gerenciamento e organização de minicursos e oficinas oferecidos pelo programa Meninas Digitais. Este sistema permite automatizar tarefas como cadastro de eventos, gerenciamento de inscrições, comunicação com participantes, e geração de relatórios, promovendo maior eficiência e alcance.  
+O sistema proposto tem como objetivo facilitar o agendamento e gerenciamento de eventos como minicursos e oficinas, 
+promovidos pelo projeto Meninas Digitais. Ele automatizará tarefas, aprimorando a organização e comunicação com as 
+participantes. 
+
+Com uma interface intuitiva e funcionalidades integradas, o sistema auxiliará a equipe na criação
+e gestão de eventos, no controle de inscrições, na comunicação com inscritas e na geração
+de relatórios e certificados
 
 ### Funcionalidades Principais:
 1. **Gerenciamento de Eventos**  
@@ -71,4 +77,49 @@ Link do [Repositório Oficial](https://github.com/AllanAdegas/Jorge-Certificador
    - Crie um projeto no Firebase Console.
    - Habilite Authentication e Firestore Database.
    - Configure o arquivo .env.local na raiz do projeto com as chaves de configuração do Firebase:
+   ```bash
+   NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-auth-domain
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-storage-bucket
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+   NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
+4. **Execute o Servidor**
+   ```bash
+   npm run dev
+   ou
+   yarn dev
+5. **Para acessar o sistema, abra o navegador e va até** http://localhost:3000
+
+
+
+## Como Usar o Sistema
+
+### Cadastro de eventos
+- Acesse o painel administrativo e clique em "Criar Evento".
+- Preencha as informações como título, descrição, público-alvo, e disponibilidade.
+
+### Inscrições
+- Usuárias podem se inscrever em eventos diretamente na página principal.
+- Após a inscrição, recebem um e-mail de confirmação.
+
+### Visualização e Notificações
+- Gerencie eventos e inscrições pelo dashboard.
+- Notifique inscritas automaticamente com lembretes e atualizações.
+
+### Relatórios
+- Acompanhe estatísticas de eventos, como número de participantes e feedbacks.
+
+
+
+
+
+
+
+
+
+
+
+
+   
 
