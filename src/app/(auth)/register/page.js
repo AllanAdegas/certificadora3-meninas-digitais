@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { register } from "@/services/auth"; // Função Firebase para cadastro
-import { db } from "@/lib/firebase"; // Firestore
+import { db } from "@/lib/firebase/client"; // Firestore
 import { doc, setDoc } from "firebase/firestore"; // Para salvar dados do usuário no Firestore
 import { Button, TextField, Typography, Box } from "@mui/material";
 import Link from "next/link";

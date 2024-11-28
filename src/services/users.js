@@ -5,7 +5,7 @@ import {
   getDocs,
   deleteDoc,
 } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "@/lib/firebase/client";
 
 // Obter todos os usuários
 export const getAllUsers = async () => {

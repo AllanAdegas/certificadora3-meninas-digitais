@@ -7,7 +7,7 @@ import {
   doc,
   addDoc,
 } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "@/lib/firebase/client";
 
 // Obter todas as inscrições
 export const getSubscriptions = async () => {

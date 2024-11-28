@@ -1,3 +1,6 @@
+"use client";
+// Conexão com o firebase no navegador
+
 import { initializeApp } from "firebase/app";
 import {
   getAuth,

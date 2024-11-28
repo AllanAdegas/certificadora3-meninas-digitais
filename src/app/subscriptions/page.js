@@ -16,7 +16,7 @@ import {
   Button,
 } from "@mui/material";
 
-import { auth } from "@/lib/firebase";
+import { auth } from "@/lib/firebase/client";
 
 export default function ManageSubscriptionsPage() {
   const [subscriptions, setSubscriptions] = useState([]);
