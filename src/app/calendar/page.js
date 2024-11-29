@@ -3,7 +3,7 @@
 import React from "react"; 
 import { useEffect, useState } from "react";
 import EventCalendar from "@/components/EventCalendar";
-import { fetchEvents } from "@/services/events";
+import { calendarEvents } from "@/services/events";
 import "tailwindcss/tailwind.css";
 
 const CalendarPage = () => {
@@ -11,17 +11,20 @@ const CalendarPage = () => {
 
   useEffect(() => {
     const loadEvents = async () => {
-      const data = await fetchEvents();
-      setEvents(
+      try {
+        const data = await calendarEvents();
+        console.log("Eventos carregados:", data); 
+        setEvents(
         data.map((event) => ({
-          title: event.title,
-          start: new Date(event.startDate), // Certifique-se de formatar como Date
-          end: new Date(event.endDate),
-          allDay: event.allDay || false,
+          title: event.titulo,
+          start: new Date(event.data), 
+          end: new Date(event.data_final),
         }))
-      );
+        );
+      } catch (error) {
+        console.error("Erro ao carregar eventos:", error);
+      }
     };
-
     loadEvents();
   }, []);
 
