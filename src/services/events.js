@@ -1,5 +1,6 @@
 import {
   collection,
+  onSnapshot,
   query,
   where,
   getDocs,
@@ -29,7 +30,7 @@ export const getActiveEvents = async () => {
   try {
     const eventsRef = collection(db, "eventos");
     const q = query(eventsRef, where("status", "==", "ativo"));
-    const querySnapshot = await getDocs(q);
+    const querySnapshot = await getDocs(q); 
 
     // Retorna a lista de eventos ativos
     return querySnapshot.docs.map((doc) => ({
@@ -97,17 +98,19 @@ export const updateEventById = async (id, updatedData) => {
   }
 };
 
-// Atualiza os eventos no calendário
-export async function getEvents() {
+
+
+export const fetchEvents = async () => {
   try {
-    const eventsRef = collection(db, "eventos");
-    const snapshot = await getDocs(eventsRef);
-    return snapshot.docs.map((doc) => ({
+    const eventsCollection = collection(db, "eventos");
+    const q = query(eventsCollection, where("status", "==", "ativo"));
+    const eventsSnapshot = await getDocs(q);
+    return eventsSnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
   } catch (error) {
-    console.error("Erro ao buscar eventos:", error);
+    console.error("Erro ao inserir eventos no calendario:", error);
     throw error;
   }
-}
+};

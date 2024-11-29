@@ -2,39 +2,35 @@
 
 import React from "react"; 
 import { useEffect, useState } from "react";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import { getEvents } from "@/services/events"; // Função para buscar eventos
+import EventCalendar from "@/components/EventCalendar";
+import { fetchEvents } from "@/services/events";
 import "tailwindcss/tailwind.css";
 
-export default function CalendarPage() {
+const CalendarPage = () => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    async function fetchEvents() {
-      const fetchedEvents = await getEvents(); // Busca eventos do Firebase
+    const loadEvents = async () => {
+      const data = await fetchEvents();
       setEvents(
-        fetchedEvents.map((event) => ({
+        data.map((event) => ({
           title: event.title,
-          start: event.date, 
+          start: new Date(event.startDate), // Certifique-se de formatar como Date
+          end: new Date(event.endDate),
+          allDay: event.allDay || false,
         }))
       );
-    }
-    fetchEvents();
+    };
+
+    loadEvents();
   }, []);
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Calendário de Eventos</h1>
-      <FullCalendar
-        plugins={[dayGridPlugin, interactionPlugin]}
-        initialView="dayGridMonth"
-        events={events}
-        eventColor="#1e40af" 
-        locale="pt-br"
-        height="auto"
-      />
+    <div>
+      <h1 className="text-center text-2xl font-bold my-5">Calendário de Eventos</h1>
+      <EventCalendar events={events} />
     </div>
   );
-}
+};
+
+export default CalendarPage;

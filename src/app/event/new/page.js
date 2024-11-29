@@ -21,14 +21,15 @@ export default function NewEventPage() {
   // Estados para os campos do formulário
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [status, setStatus] = useState("ativo");
   const [error, setError] = useState("");
 
   // Função para salvar o evento no Firestore
   const handleCreateEvent = async (e) => {
     e.preventDefault();
-    if (!title || !date || !status) {
+    if (!title || !startDate || !endDate || !status) {
       setError("Todos os campos obrigatórios devem ser preenchidos.");
       return;
     }
@@ -37,7 +38,8 @@ export default function NewEventPage() {
       await addDoc(collection(db, "eventos"), {
         titulo: title,
         descricao: description,
-        data: date,
+        data: startDate,
+        data_final: endDate,
         status: status,
       });
       router.push("/dashboard"); // Redireciona para o Dashboard após criação
@@ -101,13 +103,24 @@ export default function NewEventPage() {
 
         {/* Campo: Data */}
         <TextField
-          label="Data do Evento"
+          label="Data de Início"
           type="date"
           fullWidth
           required
           InputLabelProps={{ shrink: true }}
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+
+        {/* Campo: Data_final */}
+        <TextField
+          label="Data de Término"
+          type="date"
+          fullWidth
+          required
+          InputLabelProps={{ shrink: true }}
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
         />
 
         {/* Campo: Status */}

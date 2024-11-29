@@ -20,8 +20,9 @@ export default function EditEventPage() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
-  const [status, setStatus] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [status, setStatus] = useState("ativo");
   const [error, setError] = useState("");
 
   // Carregar dados do evento ao montar a página
@@ -31,7 +32,8 @@ export default function EditEventPage() {
         const eventData = await getEventById(id);
         setTitle(eventData.titulo || "");
         setDescription(eventData.descricao || "");
-        setDate(eventData.data || "");
+        setStartDate(eventData.data || "");
+        setEndDate(eventData.data_final || "");
         setStatus(eventData.status || "ativo");
       } catch (err) {
         console.error("Erro ao carregar evento:", err);
@@ -46,7 +48,7 @@ export default function EditEventPage() {
   const handleUpdateEvent = async (e) => {
     e.preventDefault();
 
-    if (!title || !date || !status) {
+    if (!title || !startDate || !endDate || !status) {
       setError("Todos os campos obrigatórios devem ser preenchidos.");
       return;
     }
@@ -55,7 +57,8 @@ export default function EditEventPage() {
       await updateEventById(id, {
         titulo: title,
         descricao: description,
-        data: date,
+        data: startDate,
+        data_final: endDate,
         status: status,
       });
 
@@ -125,8 +128,19 @@ export default function EditEventPage() {
           fullWidth
           required
           InputLabelProps={{ shrink: true }}
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+
+        {/* Campo: Data_final */}
+        <TextField
+          label="Data de Término"
+          type="date"
+          fullWidth
+          required
+          InputLabelProps={{ shrink: true }}
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
         />
 
         {/* Campo: Status */}
