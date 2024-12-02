@@ -24,18 +24,32 @@ export default function RegisterPage() {
       return;
     }
 
+    let user;
     try {
-      const user = await register(email, password); // Função para criar usuário no Firebase Auth
-      // Salvar nome e outros dados no Firestore
-      await setDoc(doc(db, "users", user.uid), {
-        name,
-        email,
-      });
-      router.push("/login"); // Redireciona para o login após o cadastro
+      user = await register(email, password); // Função para criar usuário no Firebase Auth
     } catch (err) {
       console.error("Erro ao cadastrar:", err);
       setError("Erro ao criar conta. Verifique os dados e tente novamente.");
     }
+
+    try {
+      const response = await fetch("/api/user/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: user.uid, name, email }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao salvar dados no Firestore.");
+      }
+    } catch (error) {
+      console.error(error);
+      setError("Erro inesperado ao criar conta. Tente novamente mais tarde.");
+    }
+
+    router.push("/login");
   };
 
   return (

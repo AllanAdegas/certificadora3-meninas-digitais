@@ -1,11 +1,23 @@
 "use client";
 
 import { createContext, useState, useEffect, useContext } from "react";
-import { auth, db } from "@/lib/firebase/client";
-import { doc, getDoc } from "firebase/firestore";
+import { auth } from "@/lib/firebase/client";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const UserContext = createContext();
+
+export function getToken() {
+  return Cookies.get("authToken");
+}
+
+export function setToken(token) {
+  return Cookies.set("authToken", token, { secure: true });
+}
+
+export function removeToken() {
+  Cookies.remove("authToken");
+}
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -21,27 +33,37 @@ export const UserProvider = ({ children }) => {
 
       if (!currentUser) {
         setUser(null);
+        removeToken();
+        setLoading(false);
         router.push("/login");
       }
 
-      try {
-        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
-        if (userDoc.exists()) {
-          setUser({ id: currentUser.uid, ...userDoc.data() });
-        } else {
-          console.error("Usuário não encontrado no Firestore.");
-          setUser(null);
-        }
-      } catch (error) {
-        console.error("Erro ao buscar dados do usuário:", error);
-      }
-    });
+      // Ask the server for user data
+      const userToken = await currentUser.getIdToken();
+      setToken(userToken);
 
+      const userResponse = await fetch(`/api/user/${currentUser.uid}`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+
+      if (!userResponse.ok) {
+        console.log("Could not get user info");
+        setLoading(false);
+        return;
+      }
+
+      const user = await userResponse.json();
+      setUser(user);
+      setIsAdmin(user.edAdmin);
+      setLoading(false);
+    });
     return unsubscribe;
   }, [router]);
 
   return (
-    <UserContext.Provider value={{ user, setUser, loading }}>
+    <UserContext.Provider value={{ user, setUser, loading, isAdmin }}>
       {children}
     </UserContext.Provider>
   );
