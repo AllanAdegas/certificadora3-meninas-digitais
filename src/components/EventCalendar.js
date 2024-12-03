@@ -8,7 +8,7 @@ moment.tz.setDefault("America/Sao_Paulo");
 const localizer = momentLocalizer(moment);
 
 const EventCalendar = ({ events, onSelectEvent }) => {
-  const eventStyleGetter = (event, start, end, isSelected) => {
+  const eventStyleGetter = () => {
     return {
       style: {
         backgroundColor: "#c67f23", 

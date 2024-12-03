@@ -22,14 +22,16 @@ export default function NewEventPage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
+  const [startTime, setStartTime] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [status, setStatus] = useState("ativo");
   const [error, setError] = useState("");
 
   // Função para salvar o evento no Firestore
   const handleCreateEvent = async (e) => {
     e.preventDefault();
-    if (!title || !startDate || !endDate || !status) {
+    if (!title || !startDate || !startTime || !endDate || !endTime || !status) {
       setError("Todos os campos obrigatórios devem ser preenchidos.");
       return;
     }
@@ -39,7 +41,9 @@ export default function NewEventPage() {
         titulo: title,
         descricao: description,
         data: startDate,
+        hora_inicio: startTime,
         data_final: endDate,
+        hora_final: endTime,
         status: status,
       });
       router.push("/dashboard"); // Redireciona para o Dashboard após criação
@@ -101,27 +105,49 @@ export default function NewEventPage() {
           onChange={(e) => setDescription(e.target.value)}
         />
 
-        {/* Campo: Data */}
-        <TextField
-          label="Data de Início"
-          type="date"
-          fullWidth
-          required
-          InputLabelProps={{ shrink: true }}
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
+        {/* Campos: Data e Hora de Início */}
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <TextField
+            label="Data de Início"
+            type="date"
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <TextField
+            label="Horário de Início"
+            type="time"
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+            value={startTime}
+            onChange={(e) => setStartTime(e.target.value)}
+          />
+        </Box>
 
-        {/* Campo: Data_final */}
-        <TextField
-          label="Data de Término"
-          type="date"
-          fullWidth
-          required
-          InputLabelProps={{ shrink: true }}
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
+        {/* Campos: Data e Hora de Término */}
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <TextField
+            label="Data de Término"
+            type="date"
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+          <TextField
+            label="Horário de Término"
+            type="time"
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+            value={endTime}
+            onChange={(e) => setEndTime(e.target.value)}
+          />
+        </Box>
 
         {/* Campo: Status */}
         <FormControl fullWidth>

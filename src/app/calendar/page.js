@@ -21,7 +21,9 @@ const CalendarPage = () => {
         data.map((event) => ({
           title: event.titulo,
           start: new Date(event.data.getTime() + event.data.getTimezoneOffset() * 60000), 
+          startTime: event.horaInicio,
           end: new Date(event.data_final.getTime() + event.data_final.getTimezoneOffset() * 60000),
+          endTime: event.horaFinal,
           description: event.descricao,
         }))
         );
@@ -49,8 +51,8 @@ const CalendarPage = () => {
       {isModalOpen && selectedEvent && (
         <Modal onClose={closeModal}>
           <h2 className="text-xl font-bold">{selectedEvent.title}</h2>
-          <p><strong>Início:</strong> {selectedEvent.start.toLocaleString()}</p>
-          <p><strong>Fim:</strong> {selectedEvent.end.toLocaleString()}</p>
+          <p><strong>Início:</strong> {selectedEvent.start.toLocaleString()}, {selectedEvent.startTime}</p>
+          <p><strong>Fim:</strong> {selectedEvent.end.toLocaleString()}, {selectedEvent.endTime}</p>
           <p><strong>Descrição:</strong> {selectedEvent.description}</p>
         </Modal>
       )}

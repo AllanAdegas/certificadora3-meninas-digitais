@@ -109,7 +109,9 @@ export const calendarEvents = async () => {
       id: doc.id,
       titulo: eventData.titulo,
       data: eventData.data?.toDate ? eventData.data.toDate() : new Date(eventData.data), 
-      data_final: eventData.data_final?.toDate ? eventData.data_final.toDate() : new Date(eventData.data_final), 
+      horaInicio: eventData.horaInicio,
+      data_final: eventData.data_final?.toDate ? eventData.data_final.toDate() : new Date(eventData.data_final),
+      horaFinal: eventData.horaFinal,
       descricao: eventData.descricao
     };
   });
