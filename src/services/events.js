@@ -99,18 +99,18 @@ export const updateEventById = async (id, updatedData) => {
 
 // Buscar eventos cadastrados
 export const calendarEvents = async () => {
-    const eventsCollection = collection(db, "eventos");
-    const q = query(eventsCollection, where("status", "==", "ativo"));
-    const eventsSnapshot = await getDocs(q);
+  const eventsCollection = collection(db, "eventos");
+  const q = query(eventsCollection, where("status", "==", "ativo"));
+  const eventsSnapshot = await getDocs(q);
 
-    return eventsSnapshot.docs.map((doc) => {
-      const eventData = doc.data();
-      return {
-        id: doc.id,
-        titulo: eventData.titulo,
-        data: eventData.data?.toDate ? eventData.data.toDate() : new Date(eventData.data), 
-        data_final: eventData.data_final?.toDate ? eventData.data_final.toDate() : new Date(eventData.data_final), 
-        descricao: eventData.descricao
-      };
-    });
+  return eventsSnapshot.docs.map((doc) => {
+    const eventData = doc.data();
+    return {
+      id: doc.id,
+      titulo: eventData.titulo,
+      data: eventData.data?.toDate ? eventData.data.toDate() : new Date(eventData.data), 
+      data_final: eventData.data_final?.toDate ? eventData.data_final.toDate() : new Date(eventData.data_final), 
+      descricao: eventData.descricao
+    };
+  });
 };

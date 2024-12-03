@@ -1,12 +1,25 @@
 import { Calendar, momentLocalizer } from "react-big-calendar";
-import moment from "moment";
+import moment from "moment-timezone";
 import "moment/locale/pt-br";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 moment.locale("pt-br");
+moment.tz.setDefault("America/Sao_Paulo");
 const localizer = momentLocalizer(moment);
 
-const EventCalendar = ({ events }) => {
+const EventCalendar = ({ events, onSelectEvent }) => {
+  const eventStyleGetter = (event, start, end, isSelected) => {
+    return {
+      style: {
+        backgroundColor: "#c67f23", 
+        color: "white",
+        borderRadius: "5px",
+        border: "none",
+        padding: "5px",
+      },
+    };
+  };
+
   return (
     <Calendar
       localizer={localizer}
@@ -14,6 +27,8 @@ const EventCalendar = ({ events }) => {
       startAccessor="start"
       endAccessor="end"
       style={{ height: 500, margin: "50px" }}
+      onSelectEvent={onSelectEvent}
+      eventPropGetter={eventStyleGetter}
       messages={{
         next: "Próximo",
         previous: "Anterior",
