@@ -34,9 +34,10 @@ export default function ComunicadosPage() {
         onChange={(e) => setMessage(e.target.value)}
       />
       <button
-        className={`mt-2 px-4 py-2 bg-blue-500 text-white rounded-md ${
+        className={`mt-2 px-4 py-2 text-white rounded-md ${
           isLoading && "opacity-50 cursor-not-allowed"
         }`}
+        style={{ backgroundColor: "#552E89" }}
         onClick={handleSend}
         disabled={isLoading}
       >

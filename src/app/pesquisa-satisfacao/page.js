@@ -1,8 +1,6 @@
 "use client";
 
-import React from "react";
-import { useState } from "react";
-import { submitFeedback } from "@/services/feedback";
+import React, { useState } from "react";
 import "tailwindcss/tailwind.css";
 
 export default function PesquisaSatisfacaoPage() {
@@ -17,13 +15,22 @@ export default function PesquisaSatisfacaoPage() {
     }
 
     try {
-        await submitFeedback({ feedback });
-        setIsSubmitted(true);
+      // Substitua esta função por uma chamada ao seu serviço ou API
+      console.log("Enviando feedback:", { feedback, rating });
+      setIsSubmitted(true);
     } catch (error) {
-        console.error(error);
-        alert("Erro ao enviar feedback.");
+      console.error(error);
+      alert("Erro ao enviar feedback.");
     }
   };
+
+  const ratingOptions = [
+    { label: "Ruim", color: "bg-red-500", textColor: "text-white" },
+    { label: "Regular", color: "bg-orange-500", textColor: "text-white" },
+    { label: "Bom", color: "bg-yellow-400", textColor: "text-white" },
+    { label: "Muito Bom", color: "bg-green-500", textColor: "text-white" },
+    { label: "Excelente", color: "bg-green-700", textColor: "text-white" },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -39,17 +46,17 @@ export default function PesquisaSatisfacaoPage() {
             <div className="mb-4">
               <p className="font-medium text-gray-700 mb-2">Como foi sua experiência?</p>
               <div className="flex space-x-2">
-                {["Ruim", "Regular", "Bom", "Muito Bom", "Excelente"].map((option, index) => (
+                {ratingOptions.map((option, index) => (
                   <button
                     key={index}
-                    className={`px-4 py-2 border rounded-md text-sm transition ${
-                      rating === option
-                        ? "bg-green-500 text-white border-green-500"
+                    className={`px-4 py-2 rounded-md text-sm transition border ${
+                      rating === option.label
+                        ? `${option.color} ${option.textColor} border-${option.color}`
                         : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
                     }`}
-                    onClick={() => setRating(option)}
+                    onClick={() => setRating(option.label)}
                   >
-                    {option}
+                    {option.label}
                   </button>
                 ))}
               </div>
@@ -75,7 +82,8 @@ export default function PesquisaSatisfacaoPage() {
 
             {/* Botão de Enviar */}
             <button
-              className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
+              className="w-full py-2 px-4 text-white rounded-md hover:opacity-90 transition"
+              style={{ backgroundColor: "#552E89" }}
               onClick={handleSubmit}
             >
               Enviar

@@ -139,7 +139,7 @@ export default function EditEventPage() {
             onChange={(e) => setStartDate(e.target.value)}
           />
           <TextField
-            label="Horário de Início"
+            label="Horário"
             type="time"
             fullWidth
             required
@@ -152,7 +152,7 @@ export default function EditEventPage() {
         {/* Campos: Data e Hora de Término */}
         <Box sx={{ display: "flex", gap: 2 }}>
           <TextField
-            label="Data de Término"
+            label="Data de Encerramento"
             type="date"
             fullWidth
             required
@@ -161,7 +161,7 @@ export default function EditEventPage() {
             onChange={(e) => setEndDate(e.target.value)}
           />
           <TextField
-            label="Horário de Término"
+            label="Horário"
             type="time"
             fullWidth
             required

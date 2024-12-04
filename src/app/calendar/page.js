@@ -51,8 +51,8 @@ const CalendarPage = () => {
       {isModalOpen && selectedEvent && (
         <Modal onClose={closeModal}>
           <h2 className="text-xl font-bold">{selectedEvent.title}</h2>
-          <p><strong>Início:</strong> {selectedEvent.start.toLocaleString()}, {selectedEvent.startTime}</p>
-          <p><strong>Fim:</strong> {selectedEvent.end.toLocaleString()}, {selectedEvent.endTime}</p>
+          <p><strong>Início:</strong> {selectedEvent.startTime}h</p>
+          <p><strong>Fim:</strong> {selectedEvent.endTime}h</p>
           <p><strong>Descrição:</strong> {selectedEvent.description}</p>
         </Modal>
       )}

@@ -2,7 +2,6 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment-timezone";
 import "moment/locale/pt-br";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { colors } from "@mui/material";
 
 moment.locale("pt-br");
 moment.tz.setDefault("America/Sao_Paulo");
