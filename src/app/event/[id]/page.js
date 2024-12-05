@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getEventById } from "@/services/events";
 import { getSubscriptionsByEvent } from "@/services/subscriptions";
+import { deleteEvent } from "@/services/events";
 import {
   Box,
   Typography,
@@ -58,6 +59,10 @@ export default function EventDetailsPage() {
       </Box>
     );
   }
+  const handleDelete = () => {
+    deleteEvent(id);
+    router.push("/dashboard");
+  };
 
   if (error) {
     return (
@@ -100,7 +105,10 @@ export default function EventDetailsPage() {
         <strong>Descrição:</strong> {event?.descricao || "Sem descrição"}
       </Typography>
       <Typography variant="body1" sx={{ mb: 2 }}>
-        <strong>Data:</strong> {event?.data || "Data não disponível"}
+        <strong>Início:</strong> {event?.data || "Data não disponível"}
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 2 }}>
+        <strong>Término:</strong> {event?.data_final || "Data não disponível"}
       </Typography>
       <Typography variant="body1" sx={{ mb: 4 }}>
         <strong>Status:</strong> {event?.status || "Indefinido"}
@@ -118,7 +126,7 @@ export default function EventDetailsPage() {
         <Button
           variant="contained"
           color="error"
-          onClick={() => console.log("Excluir evento")} // Substituir por funcionalidade real
+          onClick={handleDelete} // Substituir por funcionalidade real
         >
           Excluir Evento
         </Button>

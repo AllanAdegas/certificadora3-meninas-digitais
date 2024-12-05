@@ -20,8 +20,11 @@ export default function EditEventPage() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
-  const [status, setStatus] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [status, setStatus] = useState("ativo");
   const [error, setError] = useState("");
 
   // Carregar dados do evento ao montar a página
@@ -31,7 +34,10 @@ export default function EditEventPage() {
         const eventData = await getEventById(id);
         setTitle(eventData.titulo || "");
         setDescription(eventData.descricao || "");
-        setDate(eventData.data || "");
+        setStartDate(eventData.data || "");
+        setStartTime(eventData.horaInicio || "");
+        setEndDate(eventData.data_final || "");
+        setEndTime(eventData.horaFinal || "");
         setStatus(eventData.status || "ativo");
       } catch (err) {
         console.error("Erro ao carregar evento:", err);
@@ -46,7 +52,7 @@ export default function EditEventPage() {
   const handleUpdateEvent = async (e) => {
     e.preventDefault();
 
-    if (!title || !date || !status) {
+    if (!title || !startDate || !startTime || !endDate || !endTime || !status) {
       setError("Todos os campos obrigatórios devem ser preenchidos.");
       return;
     }
@@ -55,7 +61,10 @@ export default function EditEventPage() {
       await updateEventById(id, {
         titulo: title,
         descricao: description,
-        data: date,
+        data: startDate,
+        horaInicio: startTime,
+        data_final: endDate,
+        horaFinal: endTime,
         status: status,
       });
 
@@ -118,16 +127,49 @@ export default function EditEventPage() {
           onChange={(e) => setDescription(e.target.value)}
         />
 
-        {/* Campo: Data */}
-        <TextField
-          label="Data do Evento"
-          type="date"
-          fullWidth
-          required
-          InputLabelProps={{ shrink: true }}
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
+        {/* Campos: Data e Hora de Início */}
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <TextField
+            label="Data de Início"
+            type="date"
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <TextField
+            label="Horário"
+            type="time"
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+            value={startTime}
+            onChange={(e) => setStartTime(e.target.value)}
+          />
+        </Box>
+
+        {/* Campos: Data e Hora de Término */}
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <TextField
+            label="Data de Encerramento"
+            type="date"
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+          <TextField
+            label="Horário"
+            type="time"
+            fullWidth
+            required
+            InputLabelProps={{ shrink: true }}
+            value={endTime}
+            onChange={(e) => setEndTime(e.target.value)}
+          />
+        </Box>
 
         {/* Campo: Status */}
         <FormControl fullWidth>

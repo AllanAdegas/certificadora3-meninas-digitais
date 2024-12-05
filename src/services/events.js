@@ -5,9 +5,11 @@ import {
   getDocs,
   getDoc,
   updateDoc,
+  deleteDoc,
   doc,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
+import moment from "moment-timezone";
 
 // Obter contagem de eventos ativos
 export const getActiveEventsCount = async () => {
@@ -24,6 +26,15 @@ export const getActiveEventsCount = async () => {
   }
 };
 
+export const deleteEvent = async (id) => {
+  try {
+    await deleteDoc(doc(db, "eventos", id));
+  } catch (error) {
+    console.error("Erro ao excluir Evento:", error);
+    throw error;
+  }
+};
+
 // Obter eventos ativos com detalhes
 export const getActiveEvents = async () => {
   try {
@@ -32,10 +43,41 @@ export const getActiveEvents = async () => {
     const querySnapshot = await getDocs(q);
 
     // Retorna a lista de eventos ativos
-    return querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    return querySnapshot.docs.map((doc) => {
+      const eventData = doc.data();
+
+      // Converte as datas do Firebase para objetos Date ajustados ao fuso horário
+      const startDate = moment(
+        eventData.data?.toDate ? eventData.data.toDate() : eventData.data
+      )
+        .tz("America/Sao_Paulo")
+        .toDate();
+      const endDate = moment(
+        eventData.data_final?.toDate
+          ? eventData.data_final.toDate()
+          : eventData.data_final
+      )
+        .tz("America/Sao_Paulo")
+        .toDate();
+
+      // Extrai horas e minutos
+      const [startHour, startMinute] = eventData.horaInicio
+        .split(":")
+        .map(Number);
+      const [endHour, endMinute] = eventData.horaFinal.split(":").map(Number);
+
+      // Ajusta horários nas datas ajustadas ao fuso
+      startDate.setHours(startHour, startMinute, 0, 0);
+      endDate.setHours(endHour, endMinute, 0, 0);
+
+      return {
+        id: doc.id,
+        title: eventData.titulo,
+        start: startDate, // Combina data e horaInicio
+        end: endDate, // Combina data_final e horaFinal
+        descricao: eventData.descricao,
+      };
+    });
   } catch (error) {
     console.error("Erro ao buscar eventos ativos:", error);
     throw error;
@@ -95,4 +137,47 @@ export const updateEventById = async (id, updatedData) => {
     console.error("Erro ao atualizar evento:", error);
     throw error;
   }
+};
+
+// Buscar eventos cadastrados
+export const calendarEvents = async () => {
+  const eventsCollection = collection(db, "eventos");
+  const q = query(eventsCollection, where("status", "==", "ativo"));
+  const eventsSnapshot = await getDocs(q);
+
+  return eventsSnapshot.docs.map((doc) => {
+    const eventData = doc.data();
+
+    // Converte as datas do Firebase para objetos Date ajustados ao fuso horário
+    const startDate = moment(
+      eventData.data?.toDate ? eventData.data.toDate() : eventData.data
+    )
+      .tz("America/Sao_Paulo")
+      .toDate();
+    const endDate = moment(
+      eventData.data_final?.toDate
+        ? eventData.data_final.toDate()
+        : eventData.data_final
+    )
+      .tz("America/Sao_Paulo")
+      .toDate();
+
+    // Extrai horas e minutos
+    const [startHour, startMinute] = eventData.horaInicio
+      .split(":")
+      .map(Number);
+    const [endHour, endMinute] = eventData.horaFinal.split(":").map(Number);
+
+    // Ajusta horários nas datas ajustadas ao fuso
+    startDate.setHours(startHour, startMinute, 0, 0);
+    endDate.setHours(endHour, endMinute, 0, 0);
+
+    return {
+      id: doc.id,
+      title: eventData.titulo,
+      start: startDate, // Combina data e horaInicio
+      end: endDate, // Combina data_final e horaFinal
+      descricao: eventData.descricao,
+    };
+  });
 };
