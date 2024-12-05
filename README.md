@@ -95,6 +95,7 @@ Link do [Repositório Oficial](https://github.com/AllanAdegas/Jorge-Certificador
 - Acesse a página de cadastro e crie uma conta;
 - Realize o login.
 
+
 ### Criação de eventos
 - Acesse o painel administrativo e clique em "Criar Novo Evento";
 - Preencha as informações como: título, data, descrição e status.
@@ -109,3 +110,5 @@ Link do [Repositório Oficial](https://github.com/AllanAdegas/Jorge-Certificador
 
 ### Relatórios
 - Acompanhe o número de eventos ativos. 
+
+
