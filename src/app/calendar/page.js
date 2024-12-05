@@ -17,16 +17,7 @@ const CalendarPage = () => {
       try {
         const data = await calendarEvents();
         console.log("Eventos carregados:", data); 
-        setEvents(
-        data.map((event) => ({
-          title: event.titulo,
-          start: new Date(event.data.getTime() + event.data.getTimezoneOffset() * 60000), 
-          startTime: event.horaInicio,
-          end: new Date(event.data_final.getTime() + event.data_final.getTimezoneOffset() * 60000),
-          endTime: event.horaFinal,
-          description: event.descricao,
-        }))
-        );
+        setEvents(data);
       } catch (error) {
         console.error("Erro ao carregar eventos:", error);
       }
@@ -34,11 +25,13 @@ const CalendarPage = () => {
     loadEvents();
   }, []);
 
+  // Ao clicar em um evento, armazena o evento selecionado e abre o modal
   const handleSelectEvent = (event) => {
     setSelectedEvent(event); 
     setIsModalOpen(true); 
   };
 
+  // Fecha o modal
   const closeModal = () => {
     setSelectedEvent(null); 
     setIsModalOpen(false);
@@ -50,10 +43,16 @@ const CalendarPage = () => {
       <EventCalendar events={events} onSelectEvent={handleSelectEvent} />
       {isModalOpen && selectedEvent && (
         <Modal onClose={closeModal}>
-          <h2 className="text-xl font-bold">{selectedEvent.title}</h2>
-          <p><strong>Início:</strong> {selectedEvent.startTime}h</p>
-          <p><strong>Fim:</strong> {selectedEvent.endTime}h</p>
-          <p><strong>Descrição:</strong> {selectedEvent.description}</p>
+          <h2 className="text-center text-xl font-bold">{selectedEvent.title}</h2>
+          <p>
+            <strong>Início:</strong> {selectedEvent.start.toLocaleDateString("pt-BR")} às {selectedEvent.start.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}h
+          </p>
+          <p>
+            <strong>Fim:</strong> {selectedEvent.end.toLocaleDateString("pt-BR")} às {selectedEvent.end.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}h
+          </p>
+          <p>
+            <strong>Descrição:</strong> {selectedEvent.descricao || "Não informado"}
+          </p>
         </Modal>
       )}
     </div>

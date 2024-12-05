@@ -16,6 +16,7 @@ const EventCalendar = ({ events, onSelectEvent }) => {
         borderRadius: "5px",
         border: "none",
         padding: "5px",
+        textAlign: "center"
       },
     };
   };

@@ -35,7 +35,7 @@ export default function PesquisaSatisfacaoPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="w-full max-w-lg bg-white p-6 rounded-md shadow-md">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">Pesquisa de Satisfação</h1>
+        <h1 className="text-center text-2xl font-bold text-gray-800 mb-4">Pesquisa de Satisfação</h1>
         {!isSubmitted ? (
           <>
             <p className="text-gray-600 mb-4">

@@ -7,6 +7,7 @@ import {
   updateDoc,
   doc,
 } from "firebase/firestore";
+import moment from "moment-timezone";
 import { db } from "@/lib/firebase";
 
 // Obter contagem de eventos ativos
@@ -32,10 +33,33 @@ export const getActiveEvents = async () => {
     const querySnapshot = await getDocs(q); 
 
     // Retorna a lista de eventos ativos
-    return querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    return querySnapshot.docs.map((doc) => {
+      const eventData = doc.data();
+
+      // Converte as datas do Firebase para objetos Date ajustados ao fuso horário
+      const startDate = moment(eventData.data?.toDate ? eventData.data.toDate() : eventData.data)
+        .tz("America/Sao_Paulo")
+        .toDate();
+      const endDate = moment(eventData.data_final?.toDate ? eventData.data_final.toDate() : eventData.data_final)
+        .tz("America/Sao_Paulo")
+        .toDate();
+
+      // Extrai horas e minutos
+      const [startHour, startMinute] = eventData.horaInicio.split(":").map(Number);
+      const [endHour, endMinute] = eventData.horaFinal.split(":").map(Number);
+
+      // Ajusta horários nas datas ajustadas ao fuso
+      startDate.setHours(startHour, startMinute, 0, 0);
+      endDate.setHours(endHour, endMinute, 0, 0);
+
+      return {
+        id: doc.id,
+        title: eventData.titulo,
+        start: startDate,   // Combina data e horaInicio
+        end: endDate,       // Combina data_final e horaFinal
+        descricao: eventData.descricao
+      }
+    });
   } catch (error) {
     console.error("Erro ao buscar eventos ativos:", error);
     throw error;
@@ -105,13 +129,28 @@ export const calendarEvents = async () => {
 
   return eventsSnapshot.docs.map((doc) => {
     const eventData = doc.data();
+
+    // Converte as datas do Firebase para objetos Date ajustados ao fuso horário
+    const startDate = moment(eventData.data?.toDate ? eventData.data.toDate() : eventData.data)
+      .tz("America/Sao_Paulo")
+      .toDate();
+    const endDate = moment(eventData.data_final?.toDate ? eventData.data_final.toDate() : eventData.data_final)
+      .tz("America/Sao_Paulo")
+      .toDate();
+
+    // Extrai horas e minutos
+    const [startHour, startMinute] = eventData.horaInicio.split(":").map(Number);
+    const [endHour, endMinute] = eventData.horaFinal.split(":").map(Number);
+
+    // Ajusta horários nas datas ajustadas ao fuso
+    startDate.setHours(startHour, startMinute, 0, 0);
+    endDate.setHours(endHour, endMinute, 0, 0);
+
     return {
       id: doc.id,
-      titulo: eventData.titulo,
-      data: eventData.data?.toDate ? eventData.data.toDate() : new Date(eventData.data), 
-      horaInicio: eventData.horaInicio,
-      data_final: eventData.data_final?.toDate ? eventData.data_final.toDate() : new Date(eventData.data_final),
-      horaFinal: eventData.horaFinal,
+      title: eventData.titulo,
+      start: startDate,   // Combina data e horaInicio
+      end: endDate,       // Combina data_final e horaFinal
       descricao: eventData.descricao
     };
   });
