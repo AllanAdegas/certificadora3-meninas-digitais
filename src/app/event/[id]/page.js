@@ -100,7 +100,10 @@ export default function EventDetailsPage() {
         <strong>Descrição:</strong> {event?.descricao || "Sem descrição"}
       </Typography>
       <Typography variant="body1" sx={{ mb: 2 }}>
-        <strong>Data:</strong> {event?.data || "Data não disponível"}
+        <strong>Início:</strong> {event?.data || "Data não disponível"}
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 2 }}>
+        <strong>Término:</strong> {event?.data_final || "Data não disponível"}
       </Typography>
       <Typography variant="body1" sx={{ mb: 4 }}>
         <strong>Status:</strong> {event?.status || "Indefinido"}

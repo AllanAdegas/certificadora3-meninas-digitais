@@ -109,17 +109,3 @@ Link do [Repositório Oficial](https://github.com/AllanAdegas/Jorge-Certificador
 
 ### Relatórios
 - Acompanhe estatísticas de eventos, como número de participantes e feedbacks.
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
