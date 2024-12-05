@@ -21,23 +21,19 @@ participantes.
 
 Com uma interface intuitiva e funcionalidades integradas, o sistema auxiliará a equipe na criação
 e gestão de eventos, no controle de inscrições, na comunicação com inscritas e na geração
-de relatórios e certificados
+de relatórios e certificados.
 
 ### Funcionalidades Principais:
 1. **Gerenciamento de Eventos**  
-   - Criação, edição e cancelamento de eventos.  
+   - Criação, edição e cancelamento de eventos;  
    - Visualização de eventos em um calendário.  
 
-2. **Inscrições Online**  
-   - Formulário para inscrição.  
-   - Lista de espera automática.  
+2. **Gerenciamento das Inscrições**  
+   - Visualização dos inscritos por evento.  
 
 3. **Comunicação e Notificações**  
-   - Lembretes automáticos via e-mail/SMS.  
-   - Envio de pesquisas de satisfação.  
-
-4. **Relatórios e Estatísticas**  
-   - Painéis com métricas e gráficos.  
+   - Tela para envio de comunicados; 
+   - Tela de pesquisa de satisfação.  
 
 
 
@@ -60,9 +56,9 @@ Link do [Repositório Oficial](https://github.com/AllanAdegas/Jorge-Certificador
 ## Instalação e Configuração
 
 ### Pré-requisitos:
-- Node.js (v16+)
-- NPM ou Yarn
-- Conta no Firebase para configuração do backend
+- Node.js (v16+);
+- NPM ou Yarn;
+- Conta no Firebase para configuração do backend.
 
 ### Passos para Configuração:
 1. **Clone o Repositório**
@@ -74,8 +70,8 @@ Link do [Repositório Oficial](https://github.com/AllanAdegas/Jorge-Certificador
    ou
    yarn install
 3. **Configuração do Firebase**
-   - Crie um projeto no Firebase Console.
-   - Habilite Authentication e Firestore Database.
+   - Crie um projeto no Firebase Console;
+   - Habilite Authentication e Firestore Database;
    - Configure o arquivo .env.local na raiz do projeto com as chaves de configuração do Firebase:
    ```bash
    NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
@@ -95,31 +91,22 @@ Link do [Repositório Oficial](https://github.com/AllanAdegas/Jorge-Certificador
 
 ## Como Usar o Sistema
 
-### Cadastro de eventos
-- Acesse o painel administrativo e clique em "Criar Evento".
-- Preencha as informações como título, descrição, público-alvo, e disponibilidade.
+### Cadastro/Login
+- Acesse a página de cadastro e crie uma conta;
+- Realize o login.
 
-### Inscrições
-- Usuárias podem se inscrever em eventos diretamente na página principal.
-- Após a inscrição, recebem um e-mail de confirmação.
+### Criação de eventos
+- Acesse o painel administrativo e clique em "Criar Novo Evento";
+- Preencha as informações como: título, data, descrição e status.
 
-### Visualização e Notificações
-- Gerencie eventos e inscrições pelo dashboard.
-- Notifique inscritas automaticamente com lembretes e atualizações.
+### Edição de eventos
+- Acesse o painel administrativo e clique em "Editar" no card do evento;
+- Edite as informações como: título, data, descrição e status.
+
+### Calendário de eventos
+- Acesse a página do calendário;
+- Vizualize os eventos ativos de forma mensal, semanal e diária.
 
 ### Relatórios
-- Acompanhe estatísticas de eventos, como número de participantes e feedbacks.
-
-
-
-
-
-
-
-
-
-
-
-
-   
+- Acompanhe o número de eventos ativos. 
 
