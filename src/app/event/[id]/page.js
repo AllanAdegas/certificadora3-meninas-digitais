@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getEventById } from "@/services/events";
 import { getSubscriptionsByEvent } from "@/services/subscriptions";
+import { deleteEvent } from "@/services/events";
 import {
   Box,
   Typography,
@@ -58,6 +59,10 @@ export default function EventDetailsPage() {
       </Box>
     );
   }
+  const handleDelete = () => {
+    deleteEvent(id);
+    router.push("/dashboard");
+  };
 
   if (error) {
     return (
@@ -121,7 +126,7 @@ export default function EventDetailsPage() {
         <Button
           variant="contained"
           color="error"
-          onClick={() => console.log("Excluir evento")} // Substituir por funcionalidade real
+          onClick={handleDelete} // Substituir por funcionalidade real
         >
           Excluir Evento
         </Button>

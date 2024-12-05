@@ -7,7 +7,7 @@ export default function EventCard({ name, date, onEdit, onDetails }) {
         display: "flex",
         flexDirection: "column",
         padding: 2,
-        backgroundColor: "#0D0D0D",
+        backgroundColor: "#dddddd",
         color: "#FFFFFF",
       }}
     >
