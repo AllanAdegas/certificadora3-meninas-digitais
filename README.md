@@ -51,12 +51,13 @@ Link do [Repositório Oficial](https://github.com/AllanAdegas/Jorge-Certificador
 - **Estilização**: TailwindCSS e Material-UI  
 - **Ferramentas Auxiliares**: ESLint para padronização de código  
 
-
-
 ## Instalação e Configuração
 
+### Vídeo de instalação das ferramentas
+- https://files.catbox.moe/qdnue6.mp4
+
 ### Pré-requisitos:
-- Node.js (v16+);
+- Node.js (v22 LTS);
 - NPM ou Yarn;
 - Conta no Firebase para configuração do backend.
 
@@ -72,6 +73,7 @@ Link do [Repositório Oficial](https://github.com/AllanAdegas/Jorge-Certificador
 3. **Configuração do Firebase**
    - Crie um projeto no Firebase Console;
    - Habilite Authentication e Firestore Database;
+   - Adicione o arquivo .service_account.json na pasta src/lib/firebase/service_account/ 
    - Configure o arquivo .env.local na raiz do projeto com as chaves de configuração do Firebase:
    ```bash
    NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
