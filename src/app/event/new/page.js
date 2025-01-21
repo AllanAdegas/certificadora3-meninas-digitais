@@ -41,9 +41,9 @@ export default function NewEventPage() {
         titulo: title,
         descricao: description,
         data: startDate,
-        hora_inicio: startTime,
+        horaInicio: startTime,
         data_final: endDate,
-        hora_final: endTime,
+        horaFinal: endTime,
         status: status,
       });
       router.push("/dashboard"); // Redireciona para o Dashboard após criação
