@@ -126,9 +126,16 @@ export default function EventDetailsPage() {
         <Button
           variant="contained"
           color="error"
-          onClick={handleDelete} // Substituir por funcionalidade real
+          onClick={handleDelete}
         >
           Excluir Evento
+        </Button>
+        <Button
+          variant="contained"
+          sx={{ backgroundColor: "#C67F23", color: "#FFFFFF" }}
+          onClick={() => router.push(`/comunicados`)}
+        >
+          Enviar Comunicado
         </Button>
       </Box>
 

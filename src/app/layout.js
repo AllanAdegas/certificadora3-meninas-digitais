@@ -73,10 +73,16 @@ const Header = () => {
           >
             Meninas Digitais
           </Typography>
+          <hr></hr>
           <List>
             {/* Link para Eventos */}
-            <ListItem button component={Link} href="/eventos">
+            <ListItem button component={Link} href="/dashboard">
               <ListItemText primary="Eventos" sx={{ color: "#FFFFFF" }} />
+            </ListItem>
+
+            {/* Link para Calendário */}
+            <ListItem button component={Link} href="/calendar">
+              <ListItemText primary="Calendário" sx={{ color: "#FFFFFF" }} />
             </ListItem>
 
             {/* Link para Sobre */}
