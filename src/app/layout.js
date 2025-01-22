@@ -35,10 +35,18 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth); 
+      setSidebarOpen(false);
       router.push("/login"); // Redireciona para a tela de login
     } catch (error) {
       console.error("Erro ao fazer logout:", error);
     }
+  };
+
+  const navigateAndRefresh = (path) => {
+    // Fecha o sidebar antes de navegar
+    setSidebarOpen(false); 
+    router.push(path);
+    router.refresh(); // Força o refresh da página
   };
 
   return (
@@ -91,18 +99,33 @@ const Header = () => {
           <hr></hr>
           <List>
             {/* Link para Eventos */}
-            <ListItem button component={Link} href="/dashboard">
-              <ListItemText primary="Eventos" sx={{ color: "#FFFFFF" }} />
+            <ListItem>
+              <ListItemButton
+                onClick={() => navigateAndRefresh("/dashboard")}
+                sx={{ color: "#FFFFFF" }} 
+              >
+                <ListItemText primary="Eventos"/>
+              </ListItemButton>
             </ListItem>
 
             {/* Link para Calendário */}
-            <ListItem button component={Link} href="/calendar">
-              <ListItemText primary="Calendário" sx={{ color: "#FFFFFF" }} />
+            <ListItem>
+              <ListItemButton
+                onClick={() => navigateAndRefresh("/calendar")}
+                sx={{ color: "#FFFFFF" }} 
+              >
+                <ListItemText primary="Calendário"/>
+              </ListItemButton>
             </ListItem>
 
             {/* Link para Sobre */}
-            <ListItem button component={Link} href="/sobre">
-              <ListItemText primary="Sobre" sx={{ color: "#FFFFFF" }} />
+            <ListItem>
+              <ListItemButton
+                onClick={() => navigateAndRefresh("/sobre")}
+                sx={{ color: "#FFFFFF" }} 
+              >
+                <ListItemText primary="Sobre"/>
+              </ListItemButton>
             </ListItem>
 
             {/* Link para Gerenciar Usuários - Apenas Admin */}
