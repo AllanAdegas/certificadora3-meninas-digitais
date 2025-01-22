@@ -1,7 +1,9 @@
 "use client";
 
-import React from "react"; 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { auth, db } from "@/lib/firebase/client";
+import { doc, getDoc } from "firebase/firestore";
+import { useRouter } from 'next/navigation'; 
 import EventCalendar from "@/components/EventCalendar";
 import { calendarEvents } from "@/services/events";
 import Modal from "@/components/Modal";
@@ -11,12 +13,33 @@ const CalendarPage = () => {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+      if (!currentUser) {
+        router.push("/login");
+      } else {
+        setUser(currentUser);
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setUserName(userData.name || "No Name");
+        } else {
+          setUserName("No Name");
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
 
   useEffect(() => {
     const loadEvents = async () => {
       try {
         const data = await calendarEvents();
-        console.log("Eventos carregados:", data); 
+        console.log("Eventos carregados:", data);
         setEvents(data);
       } catch (error) {
         console.error("Erro ao carregar eventos:", error);
@@ -25,15 +48,13 @@ const CalendarPage = () => {
     loadEvents();
   }, []);
 
-  // Ao clicar em um evento, armazena o evento selecionado e abre o modal
   const handleSelectEvent = (event) => {
-    setSelectedEvent(event); 
-    setIsModalOpen(true); 
+    setSelectedEvent(event);
+    setIsModalOpen(true);
   };
 
-  // Fecha o modal
   const closeModal = () => {
-    setSelectedEvent(null); 
+    setSelectedEvent(null);
     setIsModalOpen(false);
   };
 

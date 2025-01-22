@@ -1,9 +1,12 @@
 "use client";
 
+import { useRouter } from 'next/navigation'; 
+import { signOut } from "firebase/auth"; 
+import { auth } from "@/lib/firebase/client"; 
 import { useState } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import { LightMode, DarkMode, Menu, Close } from "@mui/icons-material";
+import { LightMode, DarkMode, Menu, Close, Logout  } from "@mui/icons-material";
 import {
   AppBar,
   Toolbar,
@@ -13,9 +16,11 @@ import {
   Drawer,
   List,
   ListItem,
+  ListItemButton,
+  ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { UserProvider, useUser } from "@/context/UserContext"; // Importação corrigida
+import { UserProvider, useUser } from "@/context/UserContext"; 
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import "./globals.css";
 
@@ -23,8 +28,18 @@ const Header = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const { user, loading } = useUser();
+  const router = useRouter();
 
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth); 
+      router.push("/login"); // Redireciona para a tela de login
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+    }
+  };
 
   return (
     <>
@@ -99,6 +114,24 @@ const Header = () => {
                 />
               </ListItem>
             )}
+
+            {/* Link para Sair */}
+            <ListItem disablePadding> 
+              <ListItemButton
+                onClick={handleLogout}
+                sx={{
+                  color: "#FFFFFF",
+                  '&:hover': {
+                    backgroundColor: '#995C99',
+                    cursor: 'pointer',
+                  },
+                }}
+              >
+                <ListItemIcon>
+                  <Logout/>
+                </ListItemIcon>
+              </ListItemButton>
+            </ListItem>
           </List>
         </Box>
       </Drawer>
