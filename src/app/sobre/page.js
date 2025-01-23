@@ -29,7 +29,6 @@ const SobrePage = () => {
       return () => unsubscribe();
     }, [router]);
 
-
   return (
     <div className="px-6 py-12 bg-white min-h-screen font-sans">
       <div className="max-w-4xl mx-auto shadow-2xl rounded-lg overflow-hidden bg-white">
