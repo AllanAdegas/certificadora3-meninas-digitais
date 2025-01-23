@@ -6,9 +6,6 @@ import { auth, db } from "@/lib/firebase/client";
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 
-
-
-
 const SobrePage = () => {
     const router = useRouter();
     const [user, setUser] = useState(null);
