@@ -96,7 +96,7 @@ export default function DashboardPage() {
           component="h1"
           sx={{ mb: 4, fontWeight: "bold" }}
         >
-          Bem-vindo, {userName}!
+          Bem-vinda, {userName}!
         </Typography>
       )}
 
