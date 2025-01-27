@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { auth, db } from "@/lib/firebase/client";
+import { doc, getDoc } from "firebase/firestore";
 import { useParams, useRouter } from "next/navigation";
 import { getEventById } from "@/services/events";
 import { getSubscriptionsByEvent } from "@/services/subscriptions";
@@ -24,6 +26,26 @@ export default function EventDetailsPage() {
   const [subscriptions, setSubscriptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [user, setUser] = useState(null);
+      
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+      if (!currentUser) {
+        router.push("/login");
+      } else {
+        setUser(currentUser);
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setUserName(userData.name || "No Name");
+        } else {
+          setUserName("No Name");
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
 
   // Carregar dados do evento e inscrições
   useEffect(() => {
@@ -126,9 +148,16 @@ export default function EventDetailsPage() {
         <Button
           variant="contained"
           color="error"
-          onClick={handleDelete} // Substituir por funcionalidade real
+          onClick={handleDelete}
         >
           Excluir Evento
+        </Button>
+        <Button
+          variant="contained"
+          sx={{ backgroundColor: "#C67F23", color: "#FFFFFF" }}
+          onClick={() => router.push(`/comunicados`)}
+        >
+          Enviar Comunicado
         </Button>
       </Box>
 

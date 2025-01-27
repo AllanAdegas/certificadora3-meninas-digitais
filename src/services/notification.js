@@ -1,4 +1,4 @@
-import { db } from "@/lib/firebase";
+import { db } from "@/lib/firebase/client";
 
 export async function sendNotification({ message }) {
   const batch = db.batch();
