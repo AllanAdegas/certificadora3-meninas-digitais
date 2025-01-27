@@ -56,7 +56,7 @@ export const UserProvider = ({ children }) => {
       const user = await userResponse.json();
       console.log(`Usuário logado ${JSON.stringify(user)}`);
       setUser(user);
-      setIsAdmin(user.ehAdmin);
+      setIsAdmin(user.isAdmin);
       setLoading(false);
     });
     return unsubscribe;
