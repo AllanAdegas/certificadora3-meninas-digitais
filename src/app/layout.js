@@ -1,12 +1,12 @@
 "use client";
 
-import { useRouter } from 'next/navigation'; 
-import { signOut } from "firebase/auth"; 
-import { auth } from "@/lib/firebase/client"; 
+import { useRouter } from "next/navigation";
+import { signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase/client";
 import { useState } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import { LightMode, DarkMode, Menu, Close, Logout  } from "@mui/icons-material";
+import { LightMode, DarkMode, Menu, Close, Logout } from "@mui/icons-material";
 import {
   AppBar,
   Toolbar,
@@ -20,7 +20,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { UserProvider, useUser } from "@/context/UserContext"; 
+import { UserProvider, useUser } from "@/context/UserContext";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import "./globals.css";
 
@@ -34,7 +34,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth); 
+      await signOut(auth);
       setSidebarOpen(false);
       router.push("/login"); // Redireciona para a tela de login
     } catch (error) {
@@ -44,7 +44,7 @@ const Header = () => {
 
   const navigateAndRefresh = (path) => {
     // Fecha o sidebar antes de navegar
-    setSidebarOpen(false); 
+    setSidebarOpen(false);
     router.push(path);
     router.refresh(); // Força o refresh da página
   };
@@ -102,9 +102,9 @@ const Header = () => {
             <ListItem>
               <ListItemButton
                 onClick={() => navigateAndRefresh("/dashboard")}
-                sx={{ color: "#FFFFFF" }} 
+                sx={{ color: "#FFFFFF" }}
               >
-                <ListItemText primary="Eventos"/>
+                <ListItemText primary="Eventos" />
               </ListItemButton>
             </ListItem>
 
@@ -112,9 +112,9 @@ const Header = () => {
             <ListItem>
               <ListItemButton
                 onClick={() => navigateAndRefresh("/calendar")}
-                sx={{ color: "#FFFFFF" }} 
+                sx={{ color: "#FFFFFF" }}
               >
-                <ListItemText primary="Calendário"/>
+                <ListItemText primary="Calendário" />
               </ListItemButton>
             </ListItem>
 
@@ -122,9 +122,9 @@ const Header = () => {
             <ListItem>
               <ListItemButton
                 onClick={() => navigateAndRefresh("/sobre")}
-                sx={{ color: "#FFFFFF" }} 
+                sx={{ color: "#FFFFFF" }}
               >
-                <ListItemText primary="Sobre"/>
+                <ListItemText primary="Sobre" />
               </ListItemButton>
             </ListItem>
 
@@ -139,19 +139,19 @@ const Header = () => {
             )}
 
             {/* Link para Sair */}
-            <ListItem disablePadding> 
+            <ListItem disablePadding>
               <ListItemButton
                 onClick={handleLogout}
                 sx={{
                   color: "#FFFFFF",
-                  '&:hover': {
-                    backgroundColor: '#995C99',
-                    cursor: 'pointer',
+                  "&:hover": {
+                    backgroundColor: "#995C99",
+                    cursor: "pointer",
                   },
                 }}
               >
                 <ListItemIcon>
-                  <Logout/>
+                  <Logout />
                 </ListItemIcon>
               </ListItemButton>
             </ListItem>
