@@ -15,7 +15,7 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
-import { UserProvider, useUser } from "@/context/UserContext"; // Importação corrigida
+import { UserProvider, useUser } from "@/context/UserContext";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import "./globals.css";
 

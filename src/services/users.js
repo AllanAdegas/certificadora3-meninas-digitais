@@ -3,7 +3,8 @@ import {
   updateDoc,
   collection,
   getDocs,
-  deleteDoc,
+  getDoc,
+  setDoc,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
 
@@ -52,6 +53,38 @@ export const deleteUser = async (id) => {
     await deleteDoc(userDoc);
   } catch (error) {
     console.error("Erro ao excluir usuário:", error);
+    throw error;
+  }
+};
+
+// Adicionar evento à lista de eventos inscritos do usuário
+export const addEventToUser = async (userId, eventId) => {
+  try {
+    const userDocRef = doc(db, "users", userId);
+    await setDoc(
+      userDocRef,
+      { enrolledEvents: { [eventId]: true } },
+      { merge: true }
+    );
+  } catch (error) {
+    console.error("Erro ao adicionar evento ao usuário:", error);
+    throw error;
+  }
+};
+
+// Obter eventos inscritos de um usuário
+export const getUserEnrolledEvents = async (userId) => {
+  try {
+    const userDocRef = doc(db, "users", userId);
+    const userSnapshot = await getDoc(userDocRef);
+    if (userSnapshot.exists()) {
+      const enrolledEvents = userSnapshot.data().enrolledEvents || {};
+      return Object.keys(enrolledEvents);
+    } else {
+      throw new Error("Usuário não encontrado.");
+    }
+  } catch (error) {
+    console.error("Erro ao buscar eventos inscritos do usuário:", error);
     throw error;
   }
 };
