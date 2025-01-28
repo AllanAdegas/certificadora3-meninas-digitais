@@ -3,12 +3,22 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useUser } from "@/context/UserContext";
 
 export default function Home() {
   const router = useRouter();
+  const user = useUser();
 
   useEffect(() => {
-    router.push("/dashboard");
+    if (!user) {
+      router.push("/login");
+    }
+
+    if (user.isAdmin) {
+      router.push("/dashboard");
+    } else {
+      router.push("/subscriptions");
+    }
   }, [router]);
 
   return (
