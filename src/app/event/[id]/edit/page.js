@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { auth, db } from "@/lib/firebase/client";
+import { doc, getDoc } from "firebase/firestore";
 import { getEventById, updateEventById } from "@/services/events";
 import {
   Box,
@@ -26,6 +28,26 @@ export default function EditEventPage() {
   const [endTime, setEndTime] = useState("");
   const [status, setStatus] = useState("ativo");
   const [error, setError] = useState("");
+  const [user, setUser] = useState(null);
+    
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+      if (!currentUser) {
+        router.push("/login");
+      } else {
+        setUser(currentUser);
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setUserName(userData.name || "No Name");
+        } else {
+          setUserName("No Name");
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
 
   // Carregar dados do evento ao montar a página
   useEffect(() => {

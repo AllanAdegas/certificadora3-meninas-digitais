@@ -1,13 +1,36 @@
 "use client";
 
-import React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { auth, db } from "@/lib/firebase/client";
+import { doc, getDoc } from "firebase/firestore";
+import { useRouter } from "next/navigation";
 import { sendNotification } from "@/services/notification"; // Função para envio
 import "tailwindcss/tailwind.css";
 
 export default function ComunicadosPage() {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+    const [user, setUser] = useState(null);
+    
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+      if (!currentUser) {
+        router.push("/login");
+      } else {
+        setUser(currentUser);
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setUserName(userData.name || "No Name");
+        } else {
+          setUserName("No Name");
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
 
   const handleSend = async () => {
     setIsLoading(true);

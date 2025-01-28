@@ -1,6 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { auth, db } from "@/lib/firebase/client";
+import { doc, getDoc } from "firebase/firestore";
+import { useRouter } from "next/navigation";
 import { getSubscriptions, deleteSubscription } from "@/services/subscriptions";
 import { getActiveEvents } from "@/services/events";
 import {
@@ -16,13 +19,32 @@ import {
   Button,
 } from "@mui/material";
 
-import { auth } from "@/lib/firebase/client";
-
 export default function ManageSubscriptionsPage() {
   const [subscriptions, setSubscriptions] = useState([]);
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(""); // Evento selecionado para filtro
   const [error, setError] = useState("");
+  const router = useRouter();
+  const [user, setUser] = useState(null);
+  
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+      if (!currentUser) {
+        router.push("/login");
+      } else {
+        setUser(currentUser);
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setUserName(userData.name || "No Name");
+        } else {
+          setUserName("No Name");
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
 
   // Carregar eventos e inscrições ao montar a página
   useEffect(() => {
