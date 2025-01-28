@@ -9,6 +9,7 @@ import {
   doc,
   arrayUnion,
   setDoc,
+  deleteField,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
 import moment from "moment-timezone";
@@ -226,6 +227,32 @@ export const enrollUserInEvent = async (eventId, userEmail) => {
     }
   } catch (error) {
     console.error("Erro ao inscrever usuário no evento:", error);
+    throw error;
+  }
+};
+
+// Remover usuário do evento
+export const removeUserFromEvent = async (eventId, userEmail) => {
+  try {
+    const eventRef = doc(db, "eventos", eventId);
+    const eventDoc = await getDoc(eventRef);
+
+    if (eventDoc.exists()) {
+      const eventData = eventDoc.data();
+
+      if (eventData.inscritos && eventData.inscritos.includes(userEmail)) {
+        const updatedInscritos = eventData.inscritos.filter(
+          (email) => email !== userEmail
+        );
+        await updateDoc(eventRef, {
+          inscritos: updatedInscritos,
+        });
+      }
+    } else {
+      throw new Error("Evento não encontrado.");
+    }
+  } catch (error) {
+    console.error("Erro ao remover usuário do evento:", error);
     throw error;
   }
 };

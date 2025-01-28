@@ -10,31 +10,67 @@ import {
   Tabs,
   Tab,
   Modal,
+  Snackbar,
+  Alert,
 } from "@mui/material";
-import { getActiveEvents, enrollUserInEvent } from "@/services/events";
+import {
+  getActiveEvents,
+  enrollUserInEvent,
+  removeUserFromEvent,
+} from "@/services/events";
+import {
+  getUserEnrolledEvents,
+  addEventToUser,
+  removeEventFromUser,
+} from "@/services/users";
 import { UserProvider, useUser } from "@/context/UserContext";
 
 const EventList = () => {
-  const [events, setEvents] = useState([]); // Armazena os eventos disponíveis
-  const [enrolledEvents, setEnrolledEvents] = useState([]); // Armazena os eventos inscritos
-  const [filteredEvents, setFilteredEvents] = useState([]); // Eventos filtrados para exibição
+  const [events, setEvents] = useState([]); // Eventos disponíveis
+  const [enrolledEvents, setEnrolledEvents] = useState([]); // Eventos inscritos do usuário
+  const [filteredEvents, setFilteredEvents] = useState([]); // Eventos disponíveis filtrados
   const [filteredEnrolledEvents, setFilteredEnrolledEvents] = useState([]); // Eventos inscritos filtrados
   const [searchTerm, setSearchTerm] = useState(""); // Termo de pesquisa
-  const [activeTab, setActiveTab] = useState(0); // Tab ativa
+  const [activeTab, setActiveTab] = useState(0); // Aba ativa
   const [openModal, setOpenModal] = useState(false); // Controle do modal
   const [selectedEvent, setSelectedEvent] = useState(null); // Evento selecionado
+  const [confirmUnenrollModal, setConfirmUnenrollModal] = useState(false); // Modal de confirmação
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  }); // Controle do Snackbar
   const { user, loading } = useUser();
-  console.log(user);
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      const eventList = await getActiveEvents();
-      setEvents(eventList);
-      setFilteredEvents(eventList);
+    const fetchEventsAndEnrolled = async () => {
+      try {
+        // Carrega eventos disponíveis
+        const eventList = await getActiveEvents();
+        setEvents(eventList);
+        setFilteredEvents(eventList);
+
+        // Carrega eventos inscritos após eventos disponíveis
+        if (user?.uid) {
+          const enrolledEventIds = await getUserEnrolledEvents(user?.uid);
+          const enrolledEventList = eventList.filter((event) =>
+            enrolledEventIds.includes(event.id)
+          );
+          setEnrolledEvents(enrolledEventList);
+          setFilteredEnrolledEvents(enrolledEventList);
+        }
+      } catch (error) {
+        console.error(
+          "Erro ao carregar eventos ou eventos inscritos:",
+          error.message
+        );
+      }
     };
 
-    fetchEvents();
-  }, []);
+    if (user?.email) {
+      fetchEventsAndEnrolled();
+    }
+  }, [user]);
 
   const handleSearch = (e) => {
     const value = e.target.value;
@@ -75,16 +111,67 @@ const EventList = () => {
   const handleEnroll = async () => {
     if (selectedEvent) {
       try {
-        userEmail;
-        const userEmail = "usuario@exemplo.com"; // Substituir pelo e-mail do usuário logado
-        await enrollUserInEvent(selectedEvent.id, userEmail);
-        alert("Inscrição confirmada!");
+        await enrollUserInEvent(selectedEvent.id, user?.email);
+        await addEventToUser(user?.uid, selectedEvent.id);
+        setSnackbar({
+          open: true,
+          message: "Inscrição confirmada!",
+          severity: "success",
+        });
         handleCloseModal();
+        const enrolledEventIds = await getUserEnrolledEvents(user?.uid);
+        const updatedEnrolledEvents = events.filter((event) =>
+          enrolledEventIds.includes(event.id)
+        );
+        setEnrolledEvents(updatedEnrolledEvents);
+        setFilteredEnrolledEvents(updatedEnrolledEvents);
       } catch (error) {
-        console.error("Erro ao se inscrever no evento:", error);
-        alert("Ocorreu um erro ao se inscrever no evento.");
+        console.error(
+          "Erro ao se inscrever no evento (ID: " + selectedEvent.id + "):",
+          error.message
+        );
+        setSnackbar({
+          open: true,
+          message: "Erro ao se inscrever no evento.",
+          severity: "error",
+        });
       }
     }
+  };
+
+  const handleUnenroll = async () => {
+    if (selectedEvent) {
+      try {
+        await removeUserFromEvent(selectedEvent.id, user?.email);
+        await removeEventFromUser(user?.uid, selectedEvent.id);
+        setSnackbar({
+          open: true,
+          message: "Você foi desinscrito do evento.",
+          severity: "success",
+        });
+        setConfirmUnenrollModal(false);
+        const enrolledEventIds = await getUserEnrolledEvents(user?.uid);
+        const updatedEnrolledEvents = events.filter((event) =>
+          enrolledEventIds.includes(event.id)
+        );
+        setEnrolledEvents(updatedEnrolledEvents);
+        setFilteredEnrolledEvents(updatedEnrolledEvents);
+      } catch (error) {
+        console.error(
+          "Erro ao desinscrever do evento (ID: " + selectedEvent.id + "):",
+          error.message
+        );
+        setSnackbar({
+          open: true,
+          message: "Erro ao desinscrever do evento.",
+          severity: "error",
+        });
+      }
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
   };
 
   const renderEvents = (eventsToRender) => (
@@ -110,14 +197,29 @@ const EventList = () => {
               <Typography variant="body2">
                 Descrição: {event.descricao}
               </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{ marginTop: "16px" }}
-                onClick={() => handleOpenModal(event)}
-              >
-                Inscrever-se
-              </Button>
+              {activeTab === 0 && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{ marginTop: "16px" }}
+                  onClick={() => handleOpenModal(event)}
+                >
+                  Inscrever-se
+                </Button>
+              )}
+              {activeTab === 1 && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  sx={{ marginTop: "16px" }}
+                  onClick={() => {
+                    setSelectedEvent(event);
+                    setConfirmUnenrollModal(true);
+                  }}
+                >
+                  Desinscrever-se
+                </Button>
+              )}
             </CardContent>
           </Card>
         ))
@@ -199,6 +301,67 @@ const EventList = () => {
           )}
         </Box>
       </Modal>
+
+      <Modal
+        open={confirmUnenrollModal}
+        onClose={() => setConfirmUnenrollModal(false)}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+          }}
+        >
+          {selectedEvent && (
+            <>
+              <Typography variant="h6" component="h2" gutterBottom>
+                Confirmar Desinscrição
+              </Typography>
+              <Typography variant="body2">
+                Você realmente deseja se desinscrever do evento "
+                {selectedEvent.title}"?
+              </Typography>
+              <Box mt={3} display="flex" justifyContent="space-between">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleUnenroll}
+                >
+                  Confirmar
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => setConfirmUnenrollModal(false)}
+                >
+                  Cancelar
+                </Button>
+              </Box>
+            </>
+          )}
+        </Box>
+      </Modal>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
