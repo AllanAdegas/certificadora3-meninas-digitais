@@ -7,7 +7,7 @@ export default function EventCard({ name, date, onEdit, onDetails }) {
         display: "flex",
         flexDirection: "column",
         padding: 2,
-        border: "1px solid #552e89",
+        border: "2px solid #552E89",
         boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
       }}
     >
@@ -32,11 +32,11 @@ export default function EventCard({ name, date, onEdit, onDetails }) {
           Editar
         </Button>
         <Button
-          variant="outlined"
+          variant="contained"
           sx={{
-            borderColor: "#C67F23",
-            color: "#C67F23",
-            "&:hover": { borderColor: "#772B8C", color: "#772B8C" },
+            backgroundColor: "#C67F23",
+            color: "#FFFFFF",
+            "&:hover": { backgroundColor: "#935e19" },
           }}
           onClick={onDetails}
         >
