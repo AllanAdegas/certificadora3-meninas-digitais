@@ -27,7 +27,7 @@ export default function EventDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [user, setUser] = useState(null);
-      
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
       if (!currentUser) {
@@ -53,8 +53,9 @@ export default function EventDetailsPage() {
       try {
         const eventData = await getEventById(id);
         setEvent(eventData);
+        console.log(eventData);
 
-        const subscriptionsData = await getSubscriptionsByEvent(id);
+        const subscriptionsData = eventData.inscritos;
         setSubscriptions(subscriptionsData);
       } catch (err) {
         console.error("Erro ao carregar dados:", err);
@@ -82,7 +83,7 @@ export default function EventDetailsPage() {
     );
   }
   const handleDelete = () => {
-    deleteEvent(id);
+    deleteEvent(event.id);
     router.push("/dashboard");
   };
 
@@ -148,17 +149,17 @@ export default function EventDetailsPage() {
         <Button
           variant="contained"
           color="error"
-          onClick={handleDelete}
+          onClick={() => handleDelete()}
         >
           Excluir Evento
         </Button>
-        <Button
+        {/* <Button
           variant="contained"
           sx={{ backgroundColor: "#C67F23", color: "#FFFFFF" }}
           onClick={() => router.push(`/comunicados`)}
         >
           Enviar Comunicado
-        </Button>
+        </Button> */}
       </Box>
 
       {/* Lista de Inscrições */}
@@ -169,15 +170,13 @@ export default function EventDetailsPage() {
         <Table sx={{ maxWidth: 800 }}>
           <TableHead>
             <TableRow>
-              <TableCell>Nome</TableCell>
               <TableCell>E-mail</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {subscriptions.map((sub) => (
-              <TableRow key={sub.id}>
-                <TableCell>{sub.name}</TableCell>
-                <TableCell>{sub.email}</TableCell>
+              <TableRow key={sub}>
+                <TableCell>{sub}</TableCell>
               </TableRow>
             ))}
           </TableBody>
