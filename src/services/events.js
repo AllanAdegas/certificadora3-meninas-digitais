@@ -7,6 +7,9 @@ import {
   updateDoc,
   deleteDoc,
   doc,
+  arrayUnion,
+  setDoc,
+  deleteField,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
 import moment from "moment-timezone";
@@ -41,18 +44,17 @@ export const getActiveEvents = async () => {
     const eventsRef = collection(db, "eventos");
     const q = query(eventsRef, where("status", "==", "ativo"));
     const querySnapshot = await getDocs(q);
-
     // Retorna a lista de eventos ativos
     return querySnapshot.docs.map((doc) => {
       const eventData = doc.data();
-
+      console.log(eventData);
       // Converte as datas do Firebase para objetos Date ajustados ao fuso horário
-      const startDate = moment(
+      let startDate = moment(
         eventData.data?.toDate ? eventData.data.toDate() : eventData.data
       )
         .tz("America/Sao_Paulo")
         .toDate();
-      const endDate = moment(
+      let endDate = moment(
         eventData.data_final?.toDate
           ? eventData.data_final.toDate()
           : eventData.data_final
@@ -69,6 +71,24 @@ export const getActiveEvents = async () => {
       // Ajusta horários nas datas ajustadas ao fuso
       startDate.setHours(startHour, startMinute, 0, 0);
       endDate.setHours(endHour, endMinute, 0, 0);
+      console.log(eventData);
+
+      //Corrindo datas
+      startDate = new Date(startDate);
+      startDate = startDate.toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+
+      endDate = new Date(endDate);
+      endDate = endDate.toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+
+      console.log(`${startDate} e ${endDate}`);
 
       return {
         id: doc.id,
@@ -180,4 +200,59 @@ export const calendarEvents = async () => {
       descricao: eventData.descricao,
     };
   });
+};
+
+// Inscrever usuário em um evento
+export const enrollUserInEvent = async (eventId, userEmail) => {
+  try {
+    const eventRef = doc(db, "eventos", eventId);
+    const eventDoc = await getDoc(eventRef);
+
+    if (eventDoc.exists()) {
+      const eventData = eventDoc.data();
+
+      if (!eventData.inscritos) {
+        // Cria a lista de inscritos caso não exista
+        await updateDoc(eventRef, {
+          inscritos: [userEmail],
+        });
+      } else {
+        // Adiciona o e-mail à lista existente
+        await updateDoc(eventRef, {
+          inscritos: arrayUnion(userEmail),
+        });
+      }
+    } else {
+      throw new Error("Evento não encontrado.");
+    }
+  } catch (error) {
+    console.error("Erro ao inscrever usuário no evento:", error);
+    throw error;
+  }
+};
+
+// Remover usuário do evento
+export const removeUserFromEvent = async (eventId, userEmail) => {
+  try {
+    const eventRef = doc(db, "eventos", eventId);
+    const eventDoc = await getDoc(eventRef);
+
+    if (eventDoc.exists()) {
+      const eventData = eventDoc.data();
+
+      if (eventData.inscritos && eventData.inscritos.includes(userEmail)) {
+        const updatedInscritos = eventData.inscritos.filter(
+          (email) => email !== userEmail
+        );
+        await updateDoc(eventRef, {
+          inscritos: updatedInscritos,
+        });
+      }
+    } else {
+      throw new Error("Evento não encontrado.");
+    }
+  } catch (error) {
+    console.error("Erro ao remover usuário do evento:", error);
+    throw error;
+  }
 };

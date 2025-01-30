@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { auth, db } from "@/lib/firebase/client";
+import { doc, getDoc } from "firebase/firestore";
 import { useParams, useRouter } from "next/navigation";
 import { getEventById } from "@/services/events";
 import { getSubscriptionsByEvent } from "@/services/subscriptions";
@@ -24,6 +26,26 @@ export default function EventDetailsPage() {
   const [subscriptions, setSubscriptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+      if (!currentUser) {
+        router.push("/login");
+      } else {
+        setUser(currentUser);
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setUserName(userData.name || "No Name");
+        } else {
+          setUserName("No Name");
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
 
   // Carregar dados do evento e inscrições
   useEffect(() => {
@@ -31,8 +53,9 @@ export default function EventDetailsPage() {
       try {
         const eventData = await getEventById(id);
         setEvent(eventData);
+        console.log(eventData);
 
-        const subscriptionsData = await getSubscriptionsByEvent(id);
+        const subscriptionsData = eventData.inscritos;
         setSubscriptions(subscriptionsData);
       } catch (err) {
         console.error("Erro ao carregar dados:", err);
@@ -60,7 +83,7 @@ export default function EventDetailsPage() {
     );
   }
   const handleDelete = () => {
-    deleteEvent(id);
+    deleteEvent(event.id);
     router.push("/dashboard");
   };
 
@@ -126,10 +149,17 @@ export default function EventDetailsPage() {
         <Button
           variant="contained"
           color="error"
-          onClick={handleDelete} // Substituir por funcionalidade real
+          onClick={() => handleDelete()}
         >
           Excluir Evento
         </Button>
+        {/* <Button
+          variant="contained"
+          sx={{ backgroundColor: "#C67F23", color: "#FFFFFF" }}
+          onClick={() => router.push(`/comunicados`)}
+        >
+          Enviar Comunicado
+        </Button> */}
       </Box>
 
       {/* Lista de Inscrições */}
@@ -140,15 +170,13 @@ export default function EventDetailsPage() {
         <Table sx={{ maxWidth: 800 }}>
           <TableHead>
             <TableRow>
-              <TableCell>Nome</TableCell>
               <TableCell>E-mail</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {subscriptions.map((sub) => (
-              <TableRow key={sub.id}>
-                <TableCell>{sub.name}</TableCell>
-                <TableCell>{sub.email}</TableCell>
+              <TableRow key={sub}>
+                <TableCell>{sub}</TableCell>
               </TableRow>
             ))}
           </TableBody>

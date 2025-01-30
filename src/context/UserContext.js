@@ -22,8 +22,8 @@ export function removeToken() {
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
   const [isAdmin, setIsAdmin] = useState(false);
+  const [uid, setUid] = useState(null);
 
   const router = useRouter();
 
@@ -33,6 +33,7 @@ export const UserProvider = ({ children }) => {
 
       if (!currentUser) {
         setUser(null);
+        setUid(null);
         removeToken();
         setLoading(false);
         router.push("/login");
@@ -55,8 +56,12 @@ export const UserProvider = ({ children }) => {
       }
 
       const user = await userResponse.json();
+      console.log(
+        `Usuário logado ${JSON.stringify({ ...user, uid: currentUser.uid })}`
+      );
+      user.uid = currentUser.uid;
       setUser(user);
-      setIsAdmin(user.edAdmin);
+      setIsAdmin(user.isAdmin);
       setLoading(false);
     });
     return unsubscribe;

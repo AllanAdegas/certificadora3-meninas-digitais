@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase/client";
+import { collection, addDoc, doc, getDoc } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase/client";
 import {
   Box,
   TextField,
@@ -17,6 +17,7 @@ import {
 
 export default function NewEventPage() {
   const router = useRouter();
+  const [user, setUser] = useState(null);
 
   // Estados para os campos do formulário
   const [title, setTitle] = useState("");
@@ -27,6 +28,25 @@ export default function NewEventPage() {
   const [endTime, setEndTime] = useState("");
   const [status, setStatus] = useState("ativo");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+      if (!currentUser) {
+        router.push("/login");
+      } else {
+        setUser(currentUser);
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setUserName(userData.name || "No Name");
+        } else {
+          setUserName("No Name");
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
 
   // Função para salvar o evento no Firestore
   const handleCreateEvent = async (e) => {
@@ -41,9 +61,9 @@ export default function NewEventPage() {
         titulo: title,
         descricao: description,
         data: startDate,
-        hora_inicio: startTime,
+        horaInicio: startTime,
         data_final: endDate,
-        hora_final: endTime,
+        horaFinal: endTime,
         status: status,
       });
       router.push("/dashboard"); // Redireciona para o Dashboard após criação
