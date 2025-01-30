@@ -96,15 +96,40 @@ const Header = () => {
           </Typography>
           <hr></hr>
           <List>
+              {/* Link para Gerenciar Usuários - Apenas Admin */}
+              {user?.role === "admin" && (
+                <ListItem>
+                  <ListItemButton
+                    onClick={() => navigateAndRefresh("/users")}
+                    sx={{ color: "#FFFFFF" }}
+                  >
+                    <ListItemText primary="Usuários" />
+                  </ListItemButton>
+                </ListItem>
+              )}
+
             {/* Link para Eventos */}
+            {user?.role === "admin" && (
+                <ListItem>
+                  <ListItemButton
+                    onClick={() => navigateAndRefresh("/dashboard")}
+                    sx={{ color: "#FFFFFF" }}
+                  >
+                    <ListItemText primary="Eventos" />
+                  </ListItemButton>
+                </ListItem>
+              )}
+
+            {/* Link para Client */}
             <ListItem>
               <ListItemButton
-                onClick={() => navigateAndRefresh("/dashboard")}
+                onClick={() => navigateAndRefresh("/client")}
                 sx={{ color: "#FFFFFF" }}
               >
-                <ListItemText primary="Eventos" />
+                <ListItemText primary="Inscreva-se" />
               </ListItemButton>
             </ListItem>
+
 
             {/* Link para Calendário */}
             <ListItem>
@@ -125,16 +150,6 @@ const Header = () => {
                 <ListItemText primary="Sobre" />
               </ListItemButton>
             </ListItem>
-
-            {/* Link para Gerenciar Usuários - Apenas Admin */}
-            {user?.role === "admin" && (
-              <ListItem button component={Link} href="/users">
-                <ListItemText
-                  primary="Gerenciar Usuários"
-                  sx={{ color: "#FFFFFF" }}
-                />
-              </ListItem>
-            )}
 
             {/* Link para Sair */}
             <ListItem disablePadding>
