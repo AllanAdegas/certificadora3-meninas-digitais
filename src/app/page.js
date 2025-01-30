@@ -13,13 +13,12 @@ export default function Home() {
     if (!user) {
       router.push("/login");
     }
-
     if (user.isAdmin) {
       router.push("/dashboard");
     } else {
       router.push("/client");
     }
-  }, [router]);
+  }, [user, router]);
 
   return (
     <Box

@@ -23,6 +23,7 @@ import {
 import { UserProvider, useUser } from "@/context/UserContext";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import "./globals.css";
+import { removeToken } from "@/context/UserContext";
 
 const Header = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -35,6 +36,8 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
+      // Clear auth token cookie
+      removeToken();
       setSidebarOpen(false);
       router.push("/login"); // Redireciona para a tela de login
     } catch (error) {
@@ -96,29 +99,29 @@ const Header = () => {
           </Typography>
           <hr></hr>
           <List>
-              {/* Link para Gerenciar Usuários - Apenas Admin */}
-              {user?.role === "admin" && (
-                <ListItem>
-                  <ListItemButton
-                    onClick={() => navigateAndRefresh("/users")}
-                    sx={{ color: "#FFFFFF" }}
-                  >
-                    <ListItemText primary="Usuários" />
-                  </ListItemButton>
-                </ListItem>
-              )}
+            {/* Link para Gerenciar Usuários - Apenas Admin */}
+            {user?.role === "admin" && (
+              <ListItem>
+                <ListItemButton
+                  onClick={() => navigateAndRefresh("/users")}
+                  sx={{ color: "#FFFFFF" }}
+                >
+                  <ListItemText primary="Usuários" />
+                </ListItemButton>
+              </ListItem>
+            )}
 
             {/* Link para Eventos */}
             {user?.role === "admin" && (
-                <ListItem>
-                  <ListItemButton
-                    onClick={() => navigateAndRefresh("/dashboard")}
-                    sx={{ color: "#FFFFFF" }}
-                  >
-                    <ListItemText primary="Dashboard" />
-                  </ListItemButton>
-                </ListItem>
-              )}
+              <ListItem>
+                <ListItemButton
+                  onClick={() => navigateAndRefresh("/dashboard")}
+                  sx={{ color: "#FFFFFF" }}
+                >
+                  <ListItemText primary="Dashboard" />
+                </ListItemButton>
+              </ListItem>
+            )}
 
             {/* Link para Client */}
             <ListItem>
@@ -129,7 +132,6 @@ const Header = () => {
                 <ListItemText primary="Inscreva-se" />
               </ListItemButton>
             </ListItem>
-
 
             {/* Link para Calendário */}
             <ListItem>
