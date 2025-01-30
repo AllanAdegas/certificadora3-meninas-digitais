@@ -73,17 +73,15 @@ const Header = () => {
               <Typography variant="body2">{user.email}</Typography>
             </Box>
           ) : (
-            <Typography variant="body2" sx={{ mr: 2 }}>
-              Carregando...
-            </Typography>
+            <Typography variant="body2" sx={{ mr: 2 }}></Typography>
           )}
-          <IconButton
+          {/* <IconButton
             edge="end"
             color="inherit"
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
           >
             {theme === "light" ? <DarkMode /> : <LightMode />}
-          </IconButton>
+          </IconButton> */}
         </Toolbar>
       </AppBar>
 

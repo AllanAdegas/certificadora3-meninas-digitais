@@ -1,5 +1,6 @@
 "use client";
 
+import { useUser } from "@/context/UserContext";
 import { useState, useEffect } from "react";
 import { auth, db } from "@/lib/firebase/client";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
@@ -15,7 +16,7 @@ import { Box, Typography, Button } from "@mui/material";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [user, setUser] = useState(null);
+  const user = useUser();
   const [userName, setUserName] = useState("");
   const [eventStats, setEventStats] = useState({
     active: 0,
@@ -96,7 +97,7 @@ export default function DashboardPage() {
           component="h1"
           sx={{ mb: 4, fontWeight: "bold" }}
         >
-          Bem-vinda, {userName}!
+          Bem-vinda!
         </Typography>
       )}
 
