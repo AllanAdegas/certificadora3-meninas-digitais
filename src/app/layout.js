@@ -115,7 +115,7 @@ const Header = () => {
                     onClick={() => navigateAndRefresh("/dashboard")}
                     sx={{ color: "#FFFFFF" }}
                   >
-                    <ListItemText primary="Eventos" />
+                    <ListItemText primary="Dashboard" />
                   </ListItemButton>
                 </ListItem>
               )}
