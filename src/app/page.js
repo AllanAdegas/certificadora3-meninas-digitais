@@ -7,18 +7,23 @@ import { useUser } from "@/context/UserContext";
 
 export default function Home() {
   const router = useRouter();
-  const user = useUser();
+  const { user, isAdmin } = useUser();
 
   useEffect(() => {
-    if (!user) {
-      router.push("/login");
-    }
-    if (user.isAdmin) {
-      router.push("/dashboard");
-    } else {
-      router.push("/client");
-    }
-  }, [user, router]);
+    setTimeout(() => {
+      console.log("User: ", user);
+
+      if (!user) {
+        router.push("/login");
+      }
+      console.log("User: ", user);
+      if (isAdmin) {
+        router.push("/dashboard");
+      } else if (user && !isAdmin) {
+        router.push("/client");
+      }
+    }, 2000);
+  }, [user]);
 
   return (
     <Box
