@@ -35,7 +35,7 @@ de relatórios e certificados.
 
 
 ## Repositório no GitHub
-Link do [Repositório Oficial](https://github.com/AllanAdegas/Jorge-Certificador3)
+Link do [Repositório Oficial](https://github.com/AllanAdegas/certificadora3-meninas-digitais)
 
 
 ## Tecnologias Utilizadas
@@ -50,7 +50,7 @@ Link do [Repositório Oficial](https://github.com/AllanAdegas/Jorge-Certificador
 ## Instalação e Configuração
 
 ### Vídeo de instalação das ferramentas
-- 
+- https://drive.google.com/file/d/1IV_HweDCbll9-9r9UBiv1DpdYiSFt8dT/view?usp=drive_link
 
 ### Pré-requisitos:
 - Node.js (v22 LTS);
