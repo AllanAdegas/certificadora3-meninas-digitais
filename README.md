@@ -29,17 +29,13 @@ de relatórios e certificados.
    - Visualização de eventos em um calendário.  
 
 2. **Gerenciamento das Inscrições**  
-   - Visualização dos inscritos por evento.  
-
-3. **Comunicação e Notificações**  
-   - Tela para envio de comunicados; 
-   - Tela de pesquisa de satisfação.  
-
+   - Visualização dos inscritos por evento.
+   - Opção para inscrever-se nos eventos.
+   - Opção para desinscrever-se dos eventos.
 
 
 ## Repositório no GitHub
 Link do [Repositório Oficial](https://github.com/AllanAdegas/Jorge-Certificador3)
-
 
 
 ## Tecnologias Utilizadas
@@ -54,7 +50,7 @@ Link do [Repositório Oficial](https://github.com/AllanAdegas/Jorge-Certificador
 ## Instalação e Configuração
 
 ### Vídeo de instalação das ferramentas
-- https://files.catbox.moe/qdnue6.mp4
+- 
 
 ### Pré-requisitos:
 - Node.js (v22 LTS);
@@ -95,22 +91,32 @@ Link do [Repositório Oficial](https://github.com/AllanAdegas/Jorge-Certificador
 
 ### Cadastro/Login
 - Acesse a página de cadastro e crie uma conta;
-- Realize o login.
-
+- Realize o login na página específica.
 
 ### Criação de eventos
-- Acesse o painel administrativo e clique em "Criar Novo Evento";
+- Acesse o painel administrativo (dashboard) e clique em "Criar Novo Evento";
 - Preencha as informações como: título, data, descrição e status.
 
 ### Edição de eventos
-- Acesse o painel administrativo e clique em "Editar" no card do evento;
+- Acesse o painel administrativo (dashboard) e clique em "Editar" no card do evento;
 - Edite as informações como: título, data, descrição e status.
 
+### Exclusão de eventos
+- Acesse o painel administrativo (dashboard) e clique em "Detalhes" no card do evento;
+- Na página de detalhes clique no botão "Excluir Evento".
+- Na página de detalhes também é possível editar o evento.
+
 ### Calendário de eventos
-- Acesse a página do calendário;
+- Acesse e recarregue a página do calendário;
 - Vizualize os eventos ativos de forma mensal, semanal e diária.
 
+### Inscrição em eventos
+- Acesse a página "Client" pelo sidebar.
+- Em "Eventos Disponíveis" se inscreva no evento escolhido.
+- Em "Eventos Inscritos" é possível de desinscrever dos eventos.
+
 ### Relatórios
-- Acompanhe o número de eventos ativos. 
+- Acompanhe o número de eventos ativos.
 
-
+### Observação
+- Para ter acesso ao painel administrativo (dashboard) e ao gerenciamento de usuários (users) deve-se ter o cargo de admin.
