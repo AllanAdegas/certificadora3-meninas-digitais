@@ -166,7 +166,7 @@ export default function EventDetailsPage() {
       <Typography variant="h5" component="h2" sx={{ mb: 3 }}>
         Participantes Inscritos
       </Typography>
-      {subscriptions.length > 0 ? (
+      {subscriptions?.length > 0 ? (
         <Table sx={{ maxWidth: 800 }}>
           <TableHead>
             <TableRow>
@@ -174,7 +174,7 @@ export default function EventDetailsPage() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {subscriptions.map((sub) => (
+            {subscriptions?.map((sub) => (
               <TableRow key={sub}>
                 <TableCell>{sub}</TableCell>
               </TableRow>

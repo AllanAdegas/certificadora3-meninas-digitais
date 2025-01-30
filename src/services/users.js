@@ -38,9 +38,16 @@ export const updateUserInfo = async (id, updatedData) => {
 
 // Atualizar papel do usuário
 export const updateUserRole = async (id, newRole) => {
+  let isAdmin = false;
+  if (newRole === "member") {
+    isAdmin = false;
+  } else if (newRole === "admin") {
+    isAdmin = true;
+  }
+
   try {
     const userDoc = doc(db, "usuarios", id);
-    await updateDoc(userDoc, { role: newRole });
+    await updateDoc(userDoc, { isAdmin: isAdmin, role: newRole });
   } catch (error) {
     console.error("Erro ao atualizar papel do usuário:", error);
     throw error;

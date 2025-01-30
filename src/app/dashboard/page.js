@@ -116,7 +116,7 @@ export default function DashboardPage() {
           value={eventStats.active}
           color="#552E89"
         />
-        <Card
+        {/* <Card
           title="Próximos Eventos"
           value={eventStats.upcoming}
           color="#772B8C"
@@ -125,7 +125,7 @@ export default function DashboardPage() {
           title="Eventos Passados"
           value={eventStats.past}
           color="#C67F23"
-        />
+        /> */}
       </Box>
 
       {/* Ações Principais */}
@@ -144,14 +144,14 @@ export default function DashboardPage() {
         >
           Criar Novo Evento
         </Button>
-
+        {/* 
         <Button
           variant="contained"
           sx={{ backgroundColor: "#772B8C", color: "#FFFFFF" }}
           onClick={() => router.push("/subscriptions")}
         >
           Gerenciar Inscrições
-        </Button>
+        </Button> */}
       </Box>
 
       {/* Lista de Eventos */}
